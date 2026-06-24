@@ -11,6 +11,7 @@ import { ModelCarousel, type CarouselModel } from "@/components/workspace/ModelC
 import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 import { AssistantsList } from "@/components/text/AssistantsList";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+import { useQueue } from "@/features/generation-queue";
 
 const textCarouselModels: CarouselModel[] = [
   { name: "ChatGPT", desc: "Универсальный ИИ от OpenAI", gradient: "linear-gradient(135deg, #10a37f, #1a7f5a)", badge: "TOP" },
@@ -104,6 +105,7 @@ const TextPage = () => {
   const subModel = provider.subModels.find((s) => s.id === subModelId) || provider.subModels[0];
   const hasMessages = messages.length > 0;
   const c = useColors();
+  const { enqueueTask } = useQueue();
 
   useEffect(() => { document.title = "ERA2 — Текстовые нейросети"; }, []);
   useEffect(() => {
@@ -130,6 +132,16 @@ const TextPage = () => {
   const handleSend = () => {
     const text = input.trim();
     if (!text || isGenerating) return;
+
+    enqueueTask({
+      type: "text",
+      prompt: text,
+      providerId: provider.id,
+      modelId: subModel.id,
+      modelLabel: subModel.name,
+      credits: subModel.credits,
+    });
+
     setMessages((prev) => [...prev, { id: Date.now().toString(), role: "user", content: text }]);
     setInput("");
     sessionStorage.removeItem("era2_draft_text");

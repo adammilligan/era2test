@@ -18,6 +18,7 @@ import { MediaChatFeed, type MediaGeneration } from "@/components/workspace/Medi
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 import { GenerationLoader } from "@/features/generation";
+import { useQueue } from "@/features/generation-queue";
 import {
   videoProviders,
   videoCarouselCards,
@@ -124,6 +125,7 @@ const VideoPage = () => {
   const subModel = provider?.subModels.find((s) => s.id === selectedSubModelId);
   const credits = subModel?.credits ?? 0;
   const hasGenerations = generations.length > 0;
+  const { enqueueTask } = useQueue();
 
   useEffect(() => { document.title = "ERA2 — Генерация видео"; }, []);
   useEffect(() => {
@@ -143,6 +145,16 @@ const VideoPage = () => {
   const handleGenerate = () => {
     const text = prompt.trim();
     if (!text || isGenerating) return;
+
+    enqueueTask({
+      type: "video",
+      prompt: text,
+      providerId: selectedProviderId,
+      modelId: selectedSubModelId,
+      modelLabel: subModel?.name ?? provider?.name ?? "Video",
+      credits,
+    });
+
     setIsGenerating(true);
     setTimeout(() => {
       setGenerations((prev) => [...prev, {

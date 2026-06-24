@@ -14,6 +14,7 @@ import { WelcomeBlock, type WelcomeScenario } from "@/components/workspace/Welco
 import { MediaChatFeed, type MediaGeneration } from "@/components/workspace/MediaChatFeed";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { GenerationLoader } from "@/features/generation";
+import { useQueue } from "@/features/generation-queue";
 import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 
 const ASPECT_TO_DIM: Record<string, [number, number]> = {
@@ -147,6 +148,7 @@ const DesignPage = () => {
   const provider = imageProviders.find((p) => p.id === selectedProviderId);
   const subModel = provider?.subModels.find((s) => s.id === selectedSubModelId);
   const hasGenerations = generations.length > 0;
+  const { enqueueTask } = useQueue();
 
   useEffect(() => { document.title = "ERA2 — Генерация изображений"; }, []);
   useEffect(() => {
@@ -168,6 +170,16 @@ const DesignPage = () => {
   const handleGenerate = () => {
     const text = prompt.trim();
     if (!text || isGenerating) return;
+
+    enqueueTask({
+      type: "image",
+      prompt: text,
+      providerId: selectedProviderId,
+      modelId: selectedSubModelId,
+      modelLabel: subModel?.name ?? provider?.name ?? "Image",
+      credits: subModel?.credits ?? 0,
+    });
+
     const [w, h] = ASPECT_TO_DIM[aspectRatio] || [1024, 1024];
     const imgs = Array.from({ length: Math.max(1, quantity) }, () => ({ width: w, height: h }));
     setIsGenerating(true);

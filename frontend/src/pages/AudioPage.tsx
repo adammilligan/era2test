@@ -9,6 +9,7 @@ import { MediaChatFeed, type MediaGeneration } from "@/components/workspace/Medi
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 import { GenerationLoader } from "@/features/generation";
+import { useQueue } from "@/features/generation-queue";
 
 /* ─── Voice data ─── */
 const voices = [
@@ -162,10 +163,21 @@ const AudioPage = () => {
 
   const currentModelName = isEL ? "ElevenLabs" : "Suno";
   const currentSubName = isEL ? elModel : `Suno ${sunoVersion}`;
+  const { enqueueTask } = useQueue();
 
   const handleGenerate = () => {
     const text = prompt.trim();
     if (!text || isGenerating) return;
+
+    enqueueTask({
+      type: "audio",
+      prompt: text,
+      providerId: selectedModel,
+      modelId: isEL ? "eleven-v2" : `suno-${sunoVersion}`,
+      modelLabel: currentSubName,
+      credits: isEL ? 60 : 30,
+    });
+
     setIsGenerating(true);
     setTimeout(() => {
       setGenerations((prev) => [...prev, {

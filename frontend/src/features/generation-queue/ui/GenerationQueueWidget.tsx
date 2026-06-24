@@ -2,15 +2,19 @@ import { Layers, MoveRight } from "lucide-react";
 import { Link, useLocation } from "@/shared/routing";
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/utils";
+import { useQueue } from "../model/useQueue";
 
 const hiddenOnPaths = ["/queue", "/auth"];
 
 export function GenerationQueueWidget() {
   const { pathname } = useLocation();
+  const { activeCount, averageActiveProgress } = useQueue();
 
   if (hiddenOnPaths.includes(pathname)) {
     return null;
   }
+
+  const hasActiveTasks = activeCount > 0;
 
   return (
     <aside
@@ -25,9 +29,17 @@ export function GenerationQueueWidget() {
         className={cn(
           "rounded-2xl border border-border bg-card",
           "shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)]",
-          "p-4",
+          "p-4 space-y-3",
         )}
       >
+        {hasActiveTasks && (
+          <p className="text-sm font-medium text-foreground">
+            {activeCount === 1
+              ? `Генерация идёт · ${averageActiveProgress}%`
+              : `Генерации идут · ${activeCount} активны · ${averageActiveProgress}%`}
+          </p>
+        )}
+
         <Button variant="default" size="default" className="w-full" asChild>
           <Link to="/queue">
             <Layers className="size-4" />
