@@ -3,15 +3,12 @@ import { getTaskSecondaryLabel, metaSecondaryClassName } from "../lib/task-meta"
 import {
   ArrowDownToLine,
   Ellipsis,
-  Image,
-  MessageSquare,
-  Mic,
   RotateCw,
-  Video,
   X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Progress } from "@/shared/ui/progress";
+import { TaskTypeIcon } from "./TaskTypeIcon";
 
 interface TaskRowProps {
   task: GenerationTask;
@@ -19,13 +16,6 @@ interface TaskRowProps {
   onCancel: (taskId: string) => void;
   onRetry: (taskId: string) => void;
 }
-
-const typeIcons: Record<GenerationTask["type"], LucideIcon> = {
-  text: MessageSquare,
-  image: Image,
-  video: Video,
-  audio: Mic,
-};
 
 const statusLabels: Record<TaskStatus, string> = {
   queued: "В очереди",
@@ -147,7 +137,6 @@ function TaskModelMeta({ modelLabel, secondaryLabel }: TaskModelMetaProps) {
 }
 
 export function TaskRow({ task, queuePosition, onCancel, onRetry }: TaskRowProps) {
-  const TypeIcon = typeIcons[task.type];
   const isRunning = task.status === "running";
   const secondaryLabel = getTaskSecondaryLabel(task, queuePosition);
   const actionIcon = getTaskActionIcon(
@@ -161,9 +150,7 @@ export function TaskRow({ task, queuePosition, onCancel, onRetry }: TaskRowProps
       {/* Mobile */}
       <div className="flex flex-col gap-3 md:hidden">
         <div className="flex items-start gap-3">
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
-            <TypeIcon className="size-4" />
-          </div>
+          <TaskTypeIcon type={task.type} />
           <p className="min-w-0 flex-1 line-clamp-2 text-[15px] font-medium leading-none text-foreground">
             {task.prompt}
           </p>
@@ -188,9 +175,7 @@ export function TaskRow({ task, queuePosition, onCancel, onRetry }: TaskRowProps
 
       {/* Desktop */}
       <div className="hidden items-center gap-3 md:flex">
-        <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
-          <TypeIcon className="size-4" />
-        </div>
+        <TaskTypeIcon type={task.type} />
 
         <div className="min-w-0 flex-1">
           <p className="line-clamp-2 text-[15px] font-medium leading-none text-foreground">

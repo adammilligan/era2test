@@ -99,6 +99,7 @@
   --border-primary: #c4b5a3;
   --border-secondary: #e3dacf;
   --border-hover: rgba(232, 84, 32, 0.3);
+  --era-accent-soft: #f8ede8;
   --shadow-card: 0 1px 2px rgba(20, 11, 5, 0.05), 0 4px 12px rgba(20, 11, 5, 0.06);
   --shadow-dropdown: 0 8px 32px rgba(20, 11, 5, 0.12);
   --seo-bg: var(--bg-primary);
@@ -205,6 +206,7 @@
   --border-primary: #2a221e;
   --border-secondary: rgba(58, 47, 41, 0.5);
   --border-hover: rgba(232, 84, 32, 0.4);
+  --era-accent-soft: #3a1a0a;
   --shadow-card: none;
   --shadow-dropdown: 0 8px 32px rgba(0, 0, 0, 0.5);
   --seo-bg: var(--bg-primary);
