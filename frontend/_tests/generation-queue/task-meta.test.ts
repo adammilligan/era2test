@@ -61,4 +61,37 @@ describe("task-meta", () => {
 
     expect(getTaskSecondaryLabel(task)).toBe("Недостаточно кредитов");
   });
+
+  it("returns default fail message when error is missing", () => {
+    const task = createMockTask({ status: "failed" });
+
+    expect(getTaskSecondaryLabel(task)).toBe("Ошибка генерации");
+  });
+
+  it("formats done label from estimatedMinutes fallback", () => {
+    const task = createMockTask({
+      status: "done",
+      estimatedSeconds: undefined,
+      estimatedMinutes: 2,
+      credits: 15,
+    });
+
+    expect(getTaskSecondaryLabel(task)).toBe("Готово за 2 мин · 15 cr");
+  });
+
+  it("formats done label with minutes and seconds", () => {
+    expect(formatDoneTaskMetaLabel(90, 30)).toBe("Готово за 1 мин 30 сек · 30 cr");
+  });
+
+  it("formats queued label without explicit position", () => {
+    const task = createMockTask({ status: "queued", credits: 6 });
+
+    expect(getTaskSecondaryLabel(task)).toBe("Позиция 1 в очереди · 6 cr");
+  });
+
+  it("returns default cancel message when error is missing", () => {
+    const task = createMockTask({ status: "canceled" });
+
+    expect(getTaskSecondaryLabel(task)).toBe(CANCELED_BY_USER_MESSAGE);
+  });
 });

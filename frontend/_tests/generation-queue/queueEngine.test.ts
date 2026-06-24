@@ -76,4 +76,37 @@ describe("queueEngine", () => {
 
     expect(nextTask.progress).toBeGreaterThan(20);
   });
+
+  it("fails running task when fail threshold is reached", () => {
+    vi.spyOn(Math, "random")
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0)
+      .mockReturnValueOnce(0);
+
+    const task = createMockTask({ id: "running", status: "running", progress: 70, type: "text" });
+    removeEngineMeta(task.id);
+    initEngineMeta(task);
+
+    const [nextTask] = applyEngineTick([task]);
+
+    expect(nextTask).toMatchObject({
+      status: "failed",
+      progress: 74,
+    });
+    expect(nextTask.errorMessage).toBeTypeOf("string");
+  });
+
+  it("progresses multiple running tasks on one tick", () => {
+    const tasks = [
+      createMockTask({ id: "running-a", status: "running", progress: 10, type: "image" }),
+      createMockTask({ id: "running-b", status: "running", progress: 20, type: "video" }),
+    ];
+
+    tasks.forEach((task) => initEngineMeta(task));
+
+    const nextTasks = applyEngineTick(tasks);
+
+    expect(nextTasks[0].progress).toBeGreaterThan(10);
+    expect(nextTasks[1].progress).toBeGreaterThan(20);
+  });
 });

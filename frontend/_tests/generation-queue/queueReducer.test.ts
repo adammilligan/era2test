@@ -96,4 +96,34 @@ describe("queueReducer", () => {
 
     expect(state.tasks.map((task) => task.id)).toEqual(["keep"]);
   });
+
+  it("marks hydrate start and error states", () => {
+    const startState = queueReducer(initialQueueState, { type: "HYDRATE_START" });
+
+    expect(startState).toMatchObject({
+      isInitializing: true,
+      initError: false,
+    });
+
+    const errorState = queueReducer(startState, { type: "HYDRATE_ERROR" });
+
+    expect(errorState).toMatchObject({
+      isHydrated: true,
+      isInitializing: false,
+      initError: true,
+    });
+  });
+
+  it("applies engine tick through reducer", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+
+    const running = createMockTask({ id: "running", status: "running", progress: 10, type: "image" });
+    const state = queueReducer(
+      { ...initialQueueState, isHydrated: true, isInitializing: false, tasks: [running] },
+      { type: "ENGINE_TICK" },
+    );
+
+    expect(state.tasks[0].progress).toBeGreaterThan(10);
+    expect(state.tasks[0].status).toBe("running");
+  });
 });

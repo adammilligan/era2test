@@ -6,54 +6,15 @@ import type { GenerationTask } from "@/entities/generation-task";
 import { Progress } from "@/shared/ui/progress";
 import { useQueue } from "../model/useQueue";
 import {
-  getAverageActiveProgress,
   getRunningTaskCount,
   getWidgetPreviewTasks,
 } from "../model/selectors";
+import { getWidgetHeader } from "../lib/widget-header";
+import { getMobileBottomStyle, WORKSPACE_PATHS } from "../lib/widget-layout";
 import { useWorkspaceInputStackOffset } from "../model/useWorkspaceInputStackOffset";
 import { TaskTypeIcon } from "./TaskTypeIcon";
 
 const hiddenOnPaths = ["/queue", "/auth"];
-
-const workspacePaths = ["/text", "/design", "/video", "/audio", "/create"];
-
-function formatRunningCount(count: number): string {
-  if (count === 1) {
-    return "1 активна";
-  }
-
-  return `${count} активны`;
-}
-
-function getWidgetHeader(tasks: GenerationTask[], runningCount: number) {
-  if (runningCount > 0) {
-    return {
-      title: runningCount === 1 ? "Генерация идёт" : "Генерации идут",
-      subtitle: `${formatRunningCount(runningCount)} · ${getAverageActiveProgress(tasks)}%`,
-      progress: getAverageActiveProgress(tasks),
-    };
-  }
-
-  const queuedCount = tasks.filter((task) => task.status === "queued").length;
-
-  return {
-    title: "Генерации в очереди",
-    subtitle: queuedCount === 1 ? "1 в очереди" : `${queuedCount} в очереди`,
-    progress: 0,
-  };
-}
-
-function getMobileBottomStyle(pathname: string, inputStackOffset: number | null): string {
-  if (workspacePaths.includes(pathname)) {
-    if (inputStackOffset !== null) {
-      return `${inputStackOffset}px`;
-    }
-
-    return "240px";
-  }
-
-  return "calc(env(safe-area-inset-bottom) + 8px)";
-}
 
 interface WidgetTaskItemProps {
   task: GenerationTask;
@@ -197,7 +158,7 @@ function GenerationQueueWidgetMobile({
   tasks,
   hasActiveTasks,
 }: GenerationQueueWidgetMobileProps) {
-  const isWorkspace = workspacePaths.includes(pathname);
+  const isWorkspace = WORKSPACE_PATHS.includes(pathname as (typeof WORKSPACE_PATHS)[number]);
   const inputStackOffset = useWorkspaceInputStackOffset(isWorkspace, pathname);
   const header = hasActiveTasks ? getWidgetHeader(tasks, getRunningTaskCount(tasks)) : null;
 

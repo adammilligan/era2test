@@ -6,6 +6,8 @@ import {
   getAverageActiveProgress,
   getQueuedTaskPositions,
   getQueueStats,
+  getRunningTaskCount,
+  getWidgetPreviewTasks,
   searchTasksByPrompt,
   sortTasks,
 } from "@/features/generation-queue/model/selectors";
@@ -84,5 +86,36 @@ describe("queue selectors", () => {
 
     expect(searchTasksByPrompt(searchable, "cyber").map((task) => task.id)).toEqual(["a"]);
     expect(searchTasksByPrompt(searchable, "  ")).toEqual(searchable);
+  });
+
+  it("counts running tasks", () => {
+    expect(getRunningTaskCount(tasks)).toBe(1);
+    expect(getRunningTaskCount([createMockTask({ status: "queued" })])).toBe(0);
+  });
+
+  it("returns widget preview with two running and one queued task", () => {
+    const previewTasks = [
+      createMockTask({ id: "running-new", status: "running", createdAt: "2026-01-01T12:00:00.000Z" }),
+      createMockTask({ id: "running-old", status: "running", createdAt: "2026-01-01T11:00:00.000Z" }),
+      createMockTask({ id: "running-extra", status: "running", createdAt: "2026-01-01T10:00:00.000Z" }),
+      createMockTask({ id: "queued-new", status: "queued", createdAt: "2026-01-01T13:00:00.000Z" }),
+      createMockTask({ id: "queued-old", status: "queued", createdAt: "2026-01-01T09:00:00.000Z" }),
+      createMockTask({ id: "done", status: "done" }),
+    ];
+
+    expect(getWidgetPreviewTasks(previewTasks).map((task) => task.id)).toEqual([
+      "running-new",
+      "running-old",
+      "queued-old",
+    ]);
+  });
+
+  it("returns empty widget preview when there are no active tasks", () => {
+    const previewTasks = [
+      createMockTask({ id: "done", status: "done" }),
+      createMockTask({ id: "failed", status: "failed" }),
+    ];
+
+    expect(getWidgetPreviewTasks(previewTasks)).toEqual([]);
   });
 });
