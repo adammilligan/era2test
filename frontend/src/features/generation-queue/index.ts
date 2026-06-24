@@ -1,3 +1,4 @@
+export { ClearDoneButton } from "./ui/ClearDoneButton";
 export { QueueProvider } from "./model/QueueProvider";
 export { useQueue } from "./model/useQueue";
 export { filterTasksByStatus, getQueueStats, getQueuedTaskPositions, sortTasks } from "./model/selectors";

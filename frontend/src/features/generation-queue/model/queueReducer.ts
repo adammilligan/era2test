@@ -17,7 +17,8 @@ export type QueueAction =
   | { type: "ENGINE_TICK" }
   | { type: "CANCEL"; taskId: string }
   | { type: "RETRY"; taskId: string }
-  | { type: "REMOVE"; taskId: string };
+  | { type: "REMOVE"; taskId: string }
+  | { type: "CLEAR_DONE" };
 
 export const initialQueueState: QueueState = {
   tasks: [],
@@ -114,6 +115,12 @@ export function queueReducer(state: QueueState, action: QueueAction): QueueState
       return {
         ...state,
         tasks: state.tasks.filter((task) => task.id !== action.taskId),
+      };
+
+    case "CLEAR_DONE":
+      return {
+        ...state,
+        tasks: state.tasks.filter((task) => task.status !== "done"),
       };
 
     default:

@@ -30,6 +30,7 @@ interface QueueContextValue {
   cancelTask: (taskId: string) => void;
   retryTask: (taskId: string) => void;
   removeTask: (taskId: string) => void;
+  clearDoneTasks: () => void;
   retryInitialization: () => void;
 }
 
@@ -114,6 +115,10 @@ export function QueueProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "REMOVE", taskId });
   }, []);
 
+  const clearDoneTasks = useCallback(() => {
+    dispatch({ type: "CLEAR_DONE" });
+  }, []);
+
   const value = useMemo<QueueContextValue>(
     () => ({
       tasks: state.tasks,
@@ -126,9 +131,10 @@ export function QueueProvider({ children }: { children: ReactNode }) {
       cancelTask,
       retryTask,
       removeTask,
+      clearDoneTasks,
       retryInitialization: hydrate,
     }),
-    [state.tasks, state.isInitializing, state.initError, enqueueTask, cancelTask, retryTask, removeTask, hydrate],
+    [state.tasks, state.isInitializing, state.initError, enqueueTask, cancelTask, retryTask, removeTask, clearDoneTasks, hydrate],
   );
 
   return <QueueContext.Provider value={value}>{children}</QueueContext.Provider>;

@@ -126,4 +126,20 @@ describe("queueReducer", () => {
     expect(state.tasks[0].progress).toBeGreaterThan(10);
     expect(state.tasks[0].status).toBe("running");
   });
+
+  it("removes all done tasks", () => {
+    const tasks = [
+      createMockTask({ id: "done-1", status: "done" }),
+      createMockTask({ id: "done-2", status: "done" }),
+      createMockTask({ id: "running", status: "running" }),
+      createMockTask({ id: "queued", status: "queued" }),
+    ];
+
+    const state = queueReducer(
+      { ...initialQueueState, isHydrated: true, isInitializing: false, tasks },
+      { type: "CLEAR_DONE" },
+    );
+
+    expect(state.tasks.map((task) => task.id)).toEqual(["running", "queued"]);
+  });
 });
