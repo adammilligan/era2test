@@ -26,6 +26,24 @@ export function getQueueStats(tasks: GenerationTask[]): QueueStats {
   );
 }
 
+export function getWidgetPreviewTasks(tasks: GenerationTask[]): GenerationTask[] {
+  const runningTasks = tasks
+    .filter((task) => task.status === "running")
+    .sort((left, right) => new Date(right.createdAt).getTime() - new Date(left.createdAt).getTime())
+    .slice(0, 2);
+
+  const queuedTasks = tasks
+    .filter((task) => task.status === "queued")
+    .sort((left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime())
+    .slice(0, 1);
+
+  return [...runningTasks, ...queuedTasks];
+}
+
+export function getRunningTaskCount(tasks: GenerationTask[]): number {
+  return tasks.filter((task) => task.status === "running").length;
+}
+
 export function getActiveTaskCount(tasks: GenerationTask[]): number {
   return tasks.filter((task) => task.status === "queued" || task.status === "running").length;
 }

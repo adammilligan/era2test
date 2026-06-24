@@ -462,7 +462,7 @@ const AudioPage = () => {
       </div>
 
       {/* ─── Sticky input area ─── */}
-      <div ref={inputAreaRef} className="shrink-0 px-4 lg:px-6 pb-4 pt-1.5 bg-[var(--bg-primary)] relative z-[1]">
+      <div ref={inputAreaRef} className="shrink-0 px-4 lg:px-6 pb-4 pt-1.5 bg-[var(--bg-primary)] relative z-[1]" data-era-workspace-input-stack>
         <div className="max-w-[780px] mx-auto">
           <WorkspaceTabs variant="attached" />
           <div className={isGenerating ? "glow-border-active" : "glow-border-idle"}>

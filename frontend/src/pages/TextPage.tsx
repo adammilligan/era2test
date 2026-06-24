@@ -253,7 +253,7 @@ const TextPage = () => {
       </div>
 
       {/* ─── Input area ─── */}
-      <div className="shrink-0 px-3 sm:px-4 pb-[calc(env(safe-area-inset-bottom)+12px)] pt-2 relative z-[1]" style={{ background: c.bg }}>
+      <div className="shrink-0 px-3 sm:px-4 pb-[calc(env(safe-area-inset-bottom)+12px)] pt-2 relative z-[1]" style={{ background: c.bg }} data-era-workspace-input-stack>
         <div className="max-w-[780px] mx-auto">
           <WorkspaceTabs variant="attached" />
 
