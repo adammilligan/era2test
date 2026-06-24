@@ -146,17 +146,18 @@ export function TaskRow({ task, queuePosition, onCancel, onRetry }: TaskRowProps
   );
 
   return (
-    <li className="rounded-xl border border-[var(--era-generation-border)] bg-card p-4">
+    <li className="rounded-[16px] border border-[var(--era-generation-border)] bg-card p-4">
       {/* Mobile */}
       <div className="flex flex-col gap-3 md:hidden">
         <div className="flex items-start gap-3">
           <TaskTypeIcon type={task.type} />
-          <p className="min-w-0 flex-1 line-clamp-2 text-[15px] font-medium leading-none text-foreground">
-            {task.prompt}
-          </p>
+          <div className="min-w-0 flex-1 flex flex-col gap-2">
+            <p className="line-clamp-2 text-[15px] font-medium leading-none text-foreground">
+              {task.prompt}
+            </p>
+            <TaskModelMeta modelLabel={task.modelLabel} secondaryLabel={secondaryLabel} />
+          </div>
         </div>
-
-        <TaskModelMeta modelLabel={task.modelLabel} secondaryLabel={secondaryLabel} />
 
         {isRunning && <Progress value={task.progress} className="h-1.5" />}
 

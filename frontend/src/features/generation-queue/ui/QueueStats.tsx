@@ -28,7 +28,7 @@ export function QueueStats({ stats }: QueueStatsProps) {
         <div
           key={item.key}
           className={cn(
-            "flex flex-col justify-center rounded-xl border border-border bg-card p-[14px] md:py-4 md:px-[18px]",
+            "flex flex-col justify-center rounded-[16px] border border-border bg-card p-[14px] md:py-4 md:px-[18px]",
             "h-[82px] w-full max-w-[172px] justify-self-center",
             "md:h-[93px] md:w-[167px] md:max-w-none",
             "lg:w-[271px]",
