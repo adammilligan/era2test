@@ -142,4 +142,25 @@ describe("queueReducer", () => {
 
     expect(state.tasks.map((task) => task.id)).toEqual(["running", "queued"]);
   });
+
+  it("resets queue to provided seed tasks", () => {
+    const seedTasks = [
+      createMockTask({ id: "seed-running", status: "running", progress: 12 }),
+      createMockTask({ id: "seed-queued", status: "queued" }),
+    ];
+
+    const state = queueReducer(
+      {
+        ...initialQueueState,
+        isHydrated: true,
+        isInitializing: false,
+        tasks: [createMockTask({ id: "old-done", status: "done" })],
+      },
+      { type: "RESET_TO_SEED", tasks: seedTasks },
+    );
+
+    expect(state.tasks).toEqual(seedTasks);
+    expect(state.isHydrated).toBe(true);
+    expect(state.isInitializing).toBe(false);
+  });
 });

@@ -14,7 +14,7 @@ import {
   type CreateGenerationTaskInput,
   type GenerationTask,
 } from "@/entities/generation-task";
-import { ensureEngineMetaForRunningTasks } from "./queueEngine";
+import { ensureEngineMetaForRunningTasks, clearAllEngineMeta } from "./queueEngine";
 import { initialQueueState, queueReducer } from "./queueReducer";
 import { getActiveTaskCount, getAverageActiveProgress, getQueueStats } from "./selectors";
 import { loadQueueTasks, saveQueueTasks } from "./storage";
@@ -31,6 +31,7 @@ interface QueueContextValue {
   retryTask: (taskId: string) => void;
   removeTask: (taskId: string) => void;
   clearDoneTasks: () => void;
+  resetToSeed: () => void;
   retryInitialization: () => void;
 }
 
@@ -119,6 +120,14 @@ export function QueueProvider({ children }: { children: ReactNode }) {
     dispatch({ type: "CLEAR_DONE" });
   }, []);
 
+  const resetToSeed = useCallback(() => {
+    clearAllEngineMeta();
+    const tasks = seedGenerationTasks();
+    ensureEngineMetaForRunningTasks(tasks);
+    dispatch({ type: "RESET_TO_SEED", tasks });
+    saveQueueTasks(tasks);
+  }, []);
+
   const value = useMemo<QueueContextValue>(
     () => ({
       tasks: state.tasks,
@@ -132,9 +141,10 @@ export function QueueProvider({ children }: { children: ReactNode }) {
       retryTask,
       removeTask,
       clearDoneTasks,
+      resetToSeed,
       retryInitialization: hydrate,
     }),
-    [state.tasks, state.isInitializing, state.initError, enqueueTask, cancelTask, retryTask, removeTask, clearDoneTasks, hydrate],
+    [state.tasks, state.isInitializing, state.initError, enqueueTask, cancelTask, retryTask, removeTask, clearDoneTasks, resetToSeed, hydrate],
   );
 
   return <QueueContext.Provider value={value}>{children}</QueueContext.Provider>;

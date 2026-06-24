@@ -14,7 +14,7 @@ import {
 } from "@/features/generation-queue";
 
 const QueuePage = () => {
-  const { tasks, stats, cancelTask, retryTask, clearDoneTasks } = useQueue();
+  const { tasks, stats, cancelTask, retryTask, clearDoneTasks, resetToSeed } = useQueue();
   const [statusFilter, setStatusFilter] = useState<QueueStatusFilter>("all");
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
 
@@ -36,7 +36,18 @@ const QueuePage = () => {
             </p>
           </div>
 
-          <ClearDoneButton doneCount={stats.done} onClear={clearDoneTasks} />
+          <div className="flex shrink-0 flex-col items-end gap-2">
+            <ClearDoneButton doneCount={stats.done} onClear={clearDoneTasks} />
+            {import.meta.env.DEV && (
+              <button
+                type="button"
+                onClick={resetToSeed}
+                className="font-mono text-[11px] text-muted-foreground underline-offset-2 hover:underline"
+              >
+                Сбросить демо
+              </button>
+            )}
+          </div>
         </div>
 
         <QueueStatsBar stats={stats} />

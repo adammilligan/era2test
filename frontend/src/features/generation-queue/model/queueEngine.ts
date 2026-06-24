@@ -49,6 +49,10 @@ export function removeEngineMeta(taskId: string): void {
   engineMeta.delete(taskId);
 }
 
+export function clearAllEngineMeta(): void {
+  engineMeta.clear();
+}
+
 export function ensureEngineMetaForRunningTasks(tasks: GenerationTask[]): void {
   for (const task of tasks) {
     if (task.status === "running" && !engineMeta.has(task.id)) {

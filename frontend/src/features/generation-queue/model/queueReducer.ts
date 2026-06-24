@@ -18,7 +18,8 @@ export type QueueAction =
   | { type: "CANCEL"; taskId: string }
   | { type: "RETRY"; taskId: string }
   | { type: "REMOVE"; taskId: string }
-  | { type: "CLEAR_DONE" };
+  | { type: "CLEAR_DONE" }
+  | { type: "RESET_TO_SEED"; tasks: GenerationTask[] };
 
 export const initialQueueState: QueueState = {
   tasks: [],
@@ -121,6 +122,15 @@ export function queueReducer(state: QueueState, action: QueueAction): QueueState
       return {
         ...state,
         tasks: state.tasks.filter((task) => task.status !== "done"),
+      };
+
+    case "RESET_TO_SEED":
+      return {
+        ...state,
+        tasks: action.tasks,
+        isHydrated: true,
+        isInitializing: false,
+        initError: false,
       };
 
     default:
