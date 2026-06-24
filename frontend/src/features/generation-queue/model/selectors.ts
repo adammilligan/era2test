@@ -41,13 +41,36 @@ export function getAverageActiveProgress(tasks: GenerationTask[]): number {
   return Math.round(total / activeTasks.length);
 }
 
-export type StatusFilter = "all" | TaskStatus;
+export function getQueuedTaskPositions(tasks: GenerationTask[]): Record<string, number> {
+  const queuedTasks = tasks
+    .filter((task) => task.status === "queued")
+    .sort((left, right) => new Date(left.createdAt).getTime() - new Date(right.createdAt).getTime());
 
-export type SortOrder = "newest" | "oldest";
+  return queuedTasks.reduce<Record<string, number>>((positions, task, index) => {
+    positions[task.id] = index + 1;
+    return positions;
+  }, {});
+}
 
-export function filterTasksByStatus(tasks: GenerationTask[], filter: StatusFilter): GenerationTask[] {
+export type QueueStatusFilter = "all" | "queued" | "running" | "done" | "failed";
+
+export type SortOrder = "newest" | "oldest" | "progress" | "status";
+
+const statusSortOrder: Record<TaskStatus, number> = {
+  running: 0,
+  queued: 1,
+  failed: 2,
+  canceled: 3,
+  done: 4,
+};
+
+export function filterTasksByStatus(tasks: GenerationTask[], filter: QueueStatusFilter): GenerationTask[] {
   if (filter === "all") {
     return tasks;
+  }
+
+  if (filter === "failed") {
+    return tasks.filter((task) => task.status === "failed" || task.status === "canceled");
   }
 
   return tasks.filter((task) => task.status === filter);
@@ -55,9 +78,20 @@ export function filterTasksByStatus(tasks: GenerationTask[], filter: StatusFilte
 
 export function sortTasks(tasks: GenerationTask[], order: SortOrder): GenerationTask[] {
   return [...tasks].sort((left, right) => {
+    if (order === "progress") {
+      return right.progress - left.progress;
+    }
+
+    if (order === "status") {
+      const statusDiff = statusSortOrder[left.status] - statusSortOrder[right.status];
+      if (statusDiff !== 0) {
+        return statusDiff;
+      }
+    }
+
     const leftTime = new Date(left.createdAt).getTime();
     const rightTime = new Date(right.createdAt).getTime();
-    return order === "newest" ? rightTime - leftTime : leftTime - rightTime;
+    return order === "oldest" ? leftTime - rightTime : rightTime - leftTime;
   });
 }
 

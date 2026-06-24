@@ -12,8 +12,11 @@ export interface GenerationTask {
   modelId: string;
   modelLabel: string;
   credits: number;
+  estimatedMinutes: number;
+  estimatedSeconds: number;
   progress: number;
   errorMessage?: string;
+  completedAt?: string;
 }
 
 export interface CreateGenerationTaskInput {
@@ -23,4 +26,6 @@ export interface CreateGenerationTaskInput {
   modelId: string;
   modelLabel: string;
   credits: number;
+  estimatedMinutes: number;
+  estimatedSeconds: number;
 }

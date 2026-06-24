@@ -23,6 +23,7 @@ import {
   videoProviders,
   videoCarouselCards,
   videoPromptSuggestions,
+  resolveEstimatedSeconds,
 } from "@/entities/ai-model";
 
 
@@ -153,6 +154,11 @@ const VideoPage = () => {
       modelId: selectedSubModelId,
       modelLabel: subModel?.name ?? provider?.name ?? "Video",
       credits,
+      estimatedMinutes: subModel?.estimatedMinutes ?? 1,
+      estimatedSeconds: resolveEstimatedSeconds({
+        estimatedMinutes: subModel?.estimatedMinutes,
+        time: subModel?.time,
+      }),
     });
 
     setIsGenerating(true);

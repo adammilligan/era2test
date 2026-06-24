@@ -2,6 +2,7 @@ import type { AIModel, SubModel } from "../model/models";
 import type { ImageProvider, ImageSubModel } from "../model/image-models";
 import type { TextProvider, TextSubModel } from "../model/text-models";
 import type { VideoProvider, VideoSubModel } from "../model/video-models";
+import { resolveEstimatedMinutes } from "../lib/estimated-time";
 import type { AiModelDto, AiProviderDto, AiSubModelDto } from "./ai-model.dto";
 
 export function mapAiSubModelDto(dto: AiSubModelDto): SubModel {
@@ -37,6 +38,10 @@ export function mapTextProviderDto(dto: AiProviderDto): TextProvider {
       id: subModel.id,
       name: subModel.display_name,
       credits: subModel.credits,
+      estimatedMinutes: resolveEstimatedMinutes({
+        estimatedMinutes: subModel.estimated_minutes,
+        time: subModel.estimated_time,
+      }),
       badge: subModel.badge,
       description: subModel.description ?? "",
       isNew: subModel.is_new,
@@ -56,6 +61,10 @@ export function mapImageProviderDto(dto: AiProviderDto): ImageProvider {
       id: subModel.id,
       name: subModel.display_name,
       credits: subModel.credits,
+      estimatedMinutes: resolveEstimatedMinutes({
+        estimatedMinutes: subModel.estimated_minutes,
+        time: subModel.estimated_time,
+      }),
       isNew: subModel.is_new,
       isDefault: subModel.is_default,
       badge: subModel.badge,
@@ -82,6 +91,10 @@ export function mapVideoProviderDto(dto: AiProviderDto): VideoProvider {
       id: subModel.id,
       name: subModel.display_name,
       credits: subModel.credits,
+      estimatedMinutes: resolveEstimatedMinutes({
+        estimatedMinutes: subModel.estimated_minutes,
+        time: subModel.estimated_time,
+      }),
       isNew: subModel.is_new,
       isDefault: subModel.is_default,
       badge: subModel.badge,

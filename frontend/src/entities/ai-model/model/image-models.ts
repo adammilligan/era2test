@@ -4,6 +4,7 @@ export interface ImageSubModel {
   id: string;
   name: string;
   credits: number;
+  estimatedMinutes: number;
   isNew?: boolean;
   isDefault?: boolean;
   badge?: string;
@@ -49,9 +50,9 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "yellow",
     description: "Нашумевшая нейросеть от Google: Gemini Flash 3.0 Banana. Загрузите до 14 изображений вместе с запросом, чтобы использовать режим Remix",
     subModels: [
-      { id: "banana-2", name: "Nano Banana 2", credits: 300, isDefault: true, isNew: true, desc: "Премиум генерация", time: "30 сек" },
-      { id: "banana-pro", name: "Nano Banana Pro", credits: 150, desc: "Профессиональная", time: "25 сек" },
-      { id: "banana", name: "Nano Banana", credits: 80, desc: "Стандартная", time: "20 сек" },
+      { id: "banana-2", name: "Nano Banana 2", credits: 300, isDefault: true, isNew: true, desc: "Премиум генерация", time: "30 сек", estimatedMinutes: 1 },
+      { id: "banana-pro", name: "Nano Banana Pro", credits: 150, desc: "Профессиональная", time: "25 сек", estimatedMinutes: 1 },
+      { id: "banana", name: "Nano Banana", credits: 80, desc: "Стандартная", time: "20 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4", "4:5", "5:4", "21:9"],
     maxUploads: 14,
@@ -66,7 +67,7 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "orange",
     description: "Полный функционал MidJourney для генерации изображений. Выберите версию модели и настройте параметры. Загрузите изображение для задания стиля.",
     subModels: [
-      { id: "mj-8", name: "MidJourney", credits: 80, isDefault: true, desc: "Топ для арта", time: "30 сек" },
+      { id: "mj-8", name: "MidJourney", credits: 80, isDefault: true, desc: "Топ для арта", time: "30 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4", "2:1", "1:2"],
     maxUploads: 1,
@@ -81,9 +82,9 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "green",
     description: "Seedream 5.0 (Lite) — единая мультимодальная модель ByteDance для генерации из текста, генерации по изображению, переноса стиля и редактирования.",
     subModels: [
-      { id: "seedream-5-lite", name: "Seedream 5 Lite", credits: 2, isDefault: true, isNew: true, desc: "Быстрая генерация", time: "10 сек" },
-      { id: "seedream-4.5", name: "Seedream 4.5", credits: 5, desc: "Улучшенная", time: "15 сек" },
-      { id: "seedream-4", name: "Seedream 4", credits: 4, desc: "Стабильная", time: "15 сек" },
+      { id: "seedream-5-lite", name: "Seedream 5 Lite", credits: 2, isDefault: true, isNew: true, desc: "Быстрая генерация", time: "10 сек", estimatedMinutes: 1 },
+      { id: "seedream-4.5", name: "Seedream 4.5", credits: 5, desc: "Улучшенная", time: "15 сек", estimatedMinutes: 1 },
+      { id: "seedream-4", name: "Seedream 4", credits: 4, desc: "Стабильная", time: "15 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4", "4:5"],
     maxUploads: 14,
@@ -98,7 +99,7 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "purple",
     description: "Создавайте или редактируйте изображения в нейросети Sora Images (она же GPT Images) от OpenAI. Загрузите до 5 изображений для режима Remix.",
     subModels: [
-      { id: "gpt-image-1.5", name: "GPT Image 1.5", credits: 40, isDefault: true, desc: "От OpenAI", time: "20 сек", badge: "PRO" },
+      { id: "gpt-image-1.5", name: "GPT Image 1.5", credits: 40, isDefault: true, desc: "От OpenAI", time: "20 сек", estimatedMinutes: 1, badge: "PRO" },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4"],
     maxUploads: 5,
@@ -112,7 +113,7 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "blue",
     description: "Набор моделей Flux для генерации изображений претендует на звание SOTA (state of the art), что является статусом лучших в индустрии.",
     subModels: [
-      { id: "flux-1", name: "Flux", credits: 15, isDefault: true, desc: "State of the art", time: "15 сек" },
+      { id: "flux-1", name: "Flux", credits: 15, isDefault: true, desc: "State of the art", time: "15 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4", "21:9"],
     maxUploads: 1,
@@ -132,7 +133,7 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "pink",
     description: "Генерируйте изображения в популярной нейросети Runway Frames при помощи текстовых запросов с различными уникальными стилями или загружайте до 3 изображений.",
     subModels: [
-      { id: "runway-frames", name: "Runway", credits: 20, isDefault: true, desc: "Креативная генерация", time: "20 сек" },
+      { id: "runway-frames", name: "Runway", credits: 20, isDefault: true, desc: "Креативная генерация", time: "20 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3"],
     maxUploads: 3,
@@ -151,7 +152,7 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "blue",
     description: "Создавайте фотореалистичные изображения с точной типографикой и мельчайшими деталями за считанные секунды с помощью Imagen 4 от Google.",
     subModels: [
-      { id: "imagen-4", name: "Imagen 4", credits: 8, isDefault: true, desc: "От Google", time: "15 сек" },
+      { id: "imagen-4", name: "Imagen 4", credits: 8, isDefault: true, desc: "От Google", time: "15 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4"],
     maxUploads: 0,
@@ -165,7 +166,7 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "green",
     description: "Кинематографичные изображения с уникальным стилем Higgsfield Soul.",
     subModels: [
-      { id: "higgsfield-soul", name: "Higgsfield Soul", credits: 15, isDefault: true, isNew: true, desc: "Новая модель", time: "20 сек" },
+      { id: "higgsfield-soul", name: "Higgsfield Soul", credits: 15, isDefault: true, isNew: true, desc: "Новая модель", time: "20 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "9:16", "16:9"],
     maxUploads: 0,
@@ -179,7 +180,7 @@ export const imageProviders: ImageProvider[] = [
     badgeColor: "green",
     description: "Высококачественные изображения с безупречной детализацией и консистентностью объектов.",
     subModels: [
-      { id: "kling-v3-omni", name: "Kling V3 Omni", credits: 25, isDefault: true, isNew: true, desc: "Мультимодальная", time: "20 сек" },
+      { id: "kling-v3-omni", name: "Kling V3 Omni", credits: 25, isDefault: true, isNew: true, desc: "Мультимодальная", time: "20 сек", estimatedMinutes: 1 },
     ],
     aspectRatios: ["1:1", "16:9", "9:16", "4:3", "3:4"],
     maxUploads: 0,

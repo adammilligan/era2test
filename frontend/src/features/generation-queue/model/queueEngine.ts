@@ -96,14 +96,29 @@ function progressRunningTasks(tasks: GenerationTask[]): GenerationTask[] {
       return task;
     }
 
+    if (!engineMeta.has(task.id)) {
+      initEngineMeta(task);
+    }
+
     const meta = engineMeta.get(task.id);
     if (!meta) {
-      initEngineMeta(task);
       return task;
     }
 
+    const currentProgress = Number.isFinite(task.progress) ? task.progress : 0;
+
+    if (currentProgress >= 100) {
+      removeEngineMeta(task.id);
+      return {
+        ...task,
+        status: "done",
+        progress: 100,
+        completedAt: new Date().toISOString(),
+      };
+    }
+
     const step = randomInt(meta.stepMin, meta.stepMax);
-    const nextProgress = Math.min(100, task.progress + step);
+    const nextProgress = Math.min(100, currentProgress + step);
 
     if (meta.willFail && meta.failAtProgress !== undefined && nextProgress >= meta.failAtProgress) {
       removeEngineMeta(task.id);
@@ -121,6 +136,7 @@ function progressRunningTasks(tasks: GenerationTask[]): GenerationTask[] {
         ...task,
         status: "done",
         progress: 100,
+        completedAt: new Date().toISOString(),
       };
     }
 
@@ -132,6 +148,7 @@ function progressRunningTasks(tasks: GenerationTask[]): GenerationTask[] {
 }
 
 export function applyEngineTick(tasks: GenerationTask[]): GenerationTask[] {
+  ensureEngineMetaForRunningTasks(tasks);
   const withStarted = startQueuedTasks(tasks);
   return progressRunningTasks(withStarted);
 }

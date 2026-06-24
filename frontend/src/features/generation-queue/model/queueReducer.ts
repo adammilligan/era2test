@@ -1,4 +1,5 @@
 import type { GenerationTask } from "@/entities/generation-task";
+import { CANCELED_BY_USER_MESSAGE } from "../lib/task-meta";
 import { applyEngineTick, removeEngineMeta } from "./queueEngine";
 
 export interface QueueState {
@@ -79,6 +80,7 @@ export function queueReducer(state: QueueState, action: QueueAction): QueueState
           return {
             ...task,
             status: "canceled",
+            errorMessage: CANCELED_BY_USER_MESSAGE,
           };
         }),
       };
@@ -101,6 +103,7 @@ export function queueReducer(state: QueueState, action: QueueAction): QueueState
             status: "queued",
             progress: 0,
             errorMessage: undefined,
+            completedAt: undefined,
             createdAt: new Date().toISOString(),
           };
         }),

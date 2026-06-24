@@ -4,6 +4,10 @@ function minutesAgo(minutes: number): string {
   return new Date(Date.now() - minutes * 60_000).toISOString();
 }
 
+function completedSecondsAfter(createdAt: string, seconds: number): string {
+  return new Date(new Date(createdAt).getTime() + seconds * 1000).toISOString();
+}
+
 export function seedGenerationTasks(): GenerationTask[] {
   return [
     {
@@ -16,6 +20,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "7",
       modelLabel: "Midjourney v7",
       credits: 80,
+      estimatedMinutes: 1,
+      estimatedSeconds: 30,
       progress: 42,
     },
     {
@@ -28,6 +34,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "kling-3.0",
       modelLabel: "Kling 3.0",
       credits: 75,
+      estimatedMinutes: 1,
+      estimatedSeconds: 60,
       progress: 28,
     },
     {
@@ -40,6 +48,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "gpt-5.2",
       modelLabel: "GPT 5.2",
       credits: 6,
+      estimatedMinutes: 2,
+      estimatedSeconds: 120,
       progress: 0,
     },
     {
@@ -52,6 +62,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "v5",
       modelLabel: "Suno v5",
       credits: 30,
+      estimatedMinutes: 2,
+      estimatedSeconds: 90,
       progress: 0,
     },
     {
@@ -64,6 +76,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "flux-kontext-pro",
       modelLabel: "Flux Kontext Pro",
       credits: 15,
+      estimatedMinutes: 1,
+      estimatedSeconds: 15,
       progress: 0,
     },
     {
@@ -76,6 +90,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "veo-3",
       modelLabel: "Veo 3",
       credits: 120,
+      estimatedMinutes: 2,
+      estimatedSeconds: 120,
       progress: 0,
     },
     {
@@ -84,10 +100,13 @@ export function seedGenerationTasks(): GenerationTask[] {
       status: "done",
       prompt: "Составь бизнес-план для онлайн-школы по нейросетям на 12 месяцев",
       createdAt: minutesAgo(45),
+      completedAt: completedSecondsAfter(minutesAgo(45), 8),
       providerId: "claude",
       modelId: "opus-4.5",
       modelLabel: "Claude Opus 4.5",
       credits: 3,
+      estimatedMinutes: 2,
+      estimatedSeconds: 120,
       progress: 100,
     },
     {
@@ -96,10 +115,13 @@ export function seedGenerationTasks(): GenerationTask[] {
       status: "done",
       prompt: "Cyberpunk neon city scene with holographic billboards, blade runner atmosphere",
       createdAt: minutesAgo(38),
+      completedAt: completedSecondsAfter(minutesAgo(38), 12),
       providerId: "nano-banana",
       modelId: "banana-2",
       modelLabel: "Nano Banana 2",
       credits: 300,
+      estimatedMinutes: 1,
+      estimatedSeconds: 30,
       progress: 100,
     },
     {
@@ -108,10 +130,13 @@ export function seedGenerationTasks(): GenerationTask[] {
       status: "done",
       prompt: "Добрый день! Представляем вам новый продукт, который изменит ваш подход к работе.",
       createdAt: minutesAgo(30),
+      completedAt: completedSecondsAfter(minutesAgo(30), 18),
       providerId: "elevenlabs",
       modelId: "eleven-v2",
       modelLabel: "Eleven v2",
       credits: 60,
+      estimatedMinutes: 1,
+      estimatedSeconds: 30,
       progress: 100,
     },
     {
@@ -124,6 +149,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "sora-2",
       modelLabel: "Sora 2",
       credits: 480,
+      estimatedMinutes: 3,
+      estimatedSeconds: 180,
       progress: 61,
       errorMessage: "Недостаточно кредитов",
     },
@@ -137,6 +164,8 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "seedream-5-lite",
       modelLabel: "Seedream 5 Lite",
       credits: 2,
+      estimatedMinutes: 1,
+      estimatedSeconds: 10,
       progress: 34,
       errorMessage: "Модель временно недоступна",
     },
@@ -150,7 +179,10 @@ export function seedGenerationTasks(): GenerationTask[] {
       modelId: "gemini-2.5-pro",
       modelLabel: "Gemini 2.5 Pro",
       credits: 1,
+      estimatedMinutes: 1,
+      estimatedSeconds: 60,
       progress: 12,
+      errorMessage: "Отменено пользователем",
     },
   ];
 }

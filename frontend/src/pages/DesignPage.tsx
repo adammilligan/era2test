@@ -27,6 +27,7 @@ import {
   imageProviders,
   imageCarouselCards,
   imagePromptSuggestions,
+  resolveEstimatedSeconds,
 } from "@/entities/ai-model";
 
 const designScenarios = [
@@ -178,6 +179,11 @@ const DesignPage = () => {
       modelId: selectedSubModelId,
       modelLabel: subModel?.name ?? provider?.name ?? "Image",
       credits: subModel?.credits ?? 0,
+      estimatedMinutes: subModel?.estimatedMinutes ?? 1,
+      estimatedSeconds: resolveEstimatedSeconds({
+        estimatedMinutes: subModel?.estimatedMinutes,
+        time: subModel?.time,
+      }),
     });
 
     const [w, h] = ASPECT_TO_DIM[aspectRatio] || [1024, 1024];

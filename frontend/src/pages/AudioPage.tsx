@@ -10,6 +10,7 @@ import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 import { WorkspaceTabs } from "@/components/workspace/WorkspaceTabs";
 import { GenerationLoader } from "@/features/generation";
 import { useQueue } from "@/features/generation-queue";
+import { audioProviders, findAudioSubModel, resolveEstimatedSeconds } from "@/entities/ai-model";
 
 /* ─── Voice data ─── */
 const voices = [
@@ -162,7 +163,10 @@ const AudioPage = () => {
   };
 
   const currentModelName = isEL ? "ElevenLabs" : "Suno";
+  const currentSubModelId = isEL ? "eleven-v2" : `suno-${sunoVersion}`;
   const currentSubName = isEL ? elModel : `Suno ${sunoVersion}`;
+  const currentAudioSubModel = findAudioSubModel(selectedModel, currentSubModelId)
+    ?? audioProviders.find((provider) => provider.id === selectedModel)?.subModels[0];
   const { enqueueTask } = useQueue();
 
   const handleGenerate = () => {
@@ -173,9 +177,13 @@ const AudioPage = () => {
       type: "audio",
       prompt: text,
       providerId: selectedModel,
-      modelId: isEL ? "eleven-v2" : `suno-${sunoVersion}`,
+      modelId: currentSubModelId,
       modelLabel: currentSubName,
-      credits: isEL ? 60 : 30,
+      credits: currentAudioSubModel?.credits ?? (isEL ? 60 : 30),
+      estimatedMinutes: currentAudioSubModel?.estimatedMinutes ?? (isEL ? 1 : 2),
+      estimatedSeconds: currentAudioSubModel
+        ? resolveEstimatedSeconds(currentAudioSubModel)
+        : (isEL ? 30 : 90),
     });
 
     setIsGenerating(true);

@@ -11,6 +11,8 @@ export function createGenerationTask(input: CreateGenerationTaskInput): Generati
     modelId: input.modelId,
     modelLabel: input.modelLabel,
     credits: input.credits,
+    estimatedMinutes: input.estimatedMinutes,
+    estimatedSeconds: input.estimatedSeconds,
     progress: 0,
   };
 }

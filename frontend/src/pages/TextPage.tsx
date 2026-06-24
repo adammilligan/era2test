@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronDown, Paperclip, Send, Globe, Brain, Copy, RefreshCw, ThumbsUp, ThumbsDown, Settings, PenLine, Lightbulb, Code, Languages, Search, BarChart3 } from "lucide-react";
-import { textProviders, textQuickActions } from "@/entities/ai-model";
+import { resolveEstimatedSeconds, textProviders, textQuickActions } from "@/entities/ai-model";
 import { TextModelSelector } from "@/features/model-picker";
 import { ModelIcon } from "@/features/model-picker";
 import { ModelGlyph } from "@/shared/ui/era/ModelGlyph";
@@ -140,6 +140,8 @@ const TextPage = () => {
       modelId: subModel.id,
       modelLabel: subModel.name,
       credits: subModel.credits,
+      estimatedMinutes: subModel.estimatedMinutes,
+      estimatedSeconds: resolveEstimatedSeconds(subModel),
     });
 
     setMessages((prev) => [...prev, { id: Date.now().toString(), role: "user", content: text }]);

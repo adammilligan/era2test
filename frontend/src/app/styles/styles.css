@@ -141,6 +141,12 @@
   --c-accent-glow: rgba(232,84,32,0.25);
   --c-accent-hi: #ffb27a;
 
+  /* Queue status dots */
+  --queue-dot-queued: #8A7F78;
+  --queue-dot-running: var(--c-accent);
+  --queue-dot-done: #34D399;
+  --queue-dot-failed: #FF6B6B;
+
   /* Light shadows */
   --shadow-1: 0 1px 2px rgba(20, 11, 5, 0.06), 0 0 0 1px var(--c-line);
   --shadow-2: 0 8px 32px rgba(20, 11, 5, 0.12), 0 20px 60px -20px rgba(20, 11, 5, 0.15), 0 0 0 1px var(--c-line);
@@ -240,6 +246,12 @@
   --c-accent-soft: #3a1a0a;
   --c-accent-glow: rgba(232,84,32,0.35);
   --c-accent-hi: #ffb27a;
+
+  /* Queue status dots */
+  --queue-dot-queued: var(--c-fg-mute);
+  --queue-dot-running: var(--c-accent);
+  --queue-dot-done: #34D399;
+  --queue-dot-failed: #FF6B6B;
 
   /* Dark shadows */
   --shadow-1: 0 1px 0 rgba(255,255,255,0.04) inset, 0 0 0 1px var(--c-line);

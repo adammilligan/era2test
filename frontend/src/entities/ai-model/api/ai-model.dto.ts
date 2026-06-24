@@ -10,6 +10,7 @@ export interface AiSubModelDto {
   badge?: string;
   description?: string;
   estimated_time?: string;
+  estimated_minutes?: number;
 }
 
 export interface AiModelDto {
