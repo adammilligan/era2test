@@ -27,7 +27,7 @@ export function GenerationQueueWidget() {
     >
       <div
         className={cn(
-          "rounded-2xl border border-border bg-card",
+          "rounded-2xl border border-[var(--era-generation-border)] bg-card",
           "shadow-[0_20px_60px_-20px_rgba(0,0,0,0.35)]",
           "p-4 space-y-3",
         )}

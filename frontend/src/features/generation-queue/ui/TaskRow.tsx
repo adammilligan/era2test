@@ -146,7 +146,7 @@ export function TaskRow({ task, queuePosition, onCancel, onRetry }: TaskRowProps
   );
 
   return (
-    <li className="rounded-xl border border-border bg-card p-4">
+    <li className="rounded-xl border border-[var(--era-generation-border)] bg-card p-4">
       {/* Mobile */}
       <div className="flex flex-col gap-3 md:hidden">
         <div className="flex items-start gap-3">
